@@ -1,0 +1,9 @@
+#imagegiphy{
+width: 200px;
+height: 150px;}
+
+#container_of_gif{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

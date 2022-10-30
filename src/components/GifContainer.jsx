@@ -1,11 +1,17 @@
 import React from "react";
+import './GifContainer.css'
 
-export default function GifContainer(){
-    return(<>
-    
-    <h2>Résultats :</h2>
-    <img src="#"/>
-    </>
+
+export default function GifContainer({data}){
+
+
+    return(<><div id="imagegiphy" 
+    style={{backgroundImage:`url(${data})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+
+}}></div></>
 
     )
 }
