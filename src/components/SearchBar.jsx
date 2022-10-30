@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useRef } from "react";
 import { ReactDOM } from "react";
 import GifContainer from "./GifContainer";
 import './GifContainer.css'
@@ -9,6 +10,7 @@ export default function SearchBar(){
     const apiKey="gsBk1DGLQzrS8aUuMmV85C1whQgHu3kr"
     const [data, setData]=useState([])
     const [search, setSearch]=useState('teachizi')
+    const searchitem = useRef()
 
     useEffect(()=>{
         fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${search}`)
@@ -19,18 +21,25 @@ export default function SearchBar(){
       const handleCHange=(e)=>{
         setSearch(e.target.value)
       }
+
+      const handleSubmit=(e)=>{
+        e.preventDefault()
+        setSearch(searchitem.current.value)
+      }
       
 
-    return(<div>
+    return(<>
 
     <h2>Cherche ton Gif Préféré</h2>
 
-    <input type='text' value={search} onChange={handleCHange}/>
+    <input type='text'ref={searchitem}/>
+
+    <input type='submit' onClick={handleSubmit}/>
     <div id="container_of_gif">
     {
-    data.map(e=> (<GifContainer data = {e.images.downsized.url} />))
+    data.map(e=> (<GifContainer dataImg = {e.images.downsized.url} dataText={e.id}/>))
   }
     </div>
 
-    </div>)
+    </>)
 }
