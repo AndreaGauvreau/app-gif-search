@@ -1,41 +1,48 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useReducer } from "react";
 import { useRef } from "react";
 import { ReactDOM } from "react";
 import GifContainer from "./GifContainer";
 import './GifContainer.css'
 
+const reducer=(a, b)=>{
+    return{...a, ...b}
+}
+const apiKey="gsBk1DGLQzrS8aUuMmV85C1whQgHu3kr"
+
 
 export default function SearchBar(){
-    const apiKey="gsBk1DGLQzrS8aUuMmV85C1whQgHu3kr"
-    const [data, setData]=useState([])
-    const [search, setSearch]=useState('')
+    const [state, setState]=useReducer(reducer, {
+        number:'1',
+        search:'',
+        data:[],
+    })
     const searchitem = useRef()
-    const [number, setNumber]= useState('1')
     const searchNumber = useRef()
 
     useEffect(()=>{
-        fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${search}&limit=${number}`)
+        fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${state.search}&limit=${state.number}`)
       .then(res => res.json())
-      .then(res => setData(res.data))
+      .then(res => setState({data:res.data}))
       })
       
       const handleCHange=(e)=>{
-        setSearch(e.target.value)
+        setState({search: e.target.value})
       }
 
       const handleSubmit=(e)=>{
         e.preventDefault()
-        setSearch(searchitem.current.value)
+        setState({search:searchitem.current.value})
       }
       const handleNumberChange=(e)=>{
-        setNumber(searchNumber.current.value)
+        setState({number: searchNumber.current.value})
       }
 
     return(
     <>
         <h2>Cherche ton Gif Préféré</h2>
-        <div id="searchBar">
+        <div id="searchBar" onClick={()=> console.log(state.search)}>
             <input id='search' type='text'ref={searchitem} placeholder='Search...'/>
             <input id='submit'type='submit' onClick={handleSubmit}/>
         </div>
@@ -51,7 +58,7 @@ export default function SearchBar(){
             </select>
         </label>
         <div id="container_of_gif">
-            {data.map(e=> (<GifContainer dataImg = {e.images.downsized.url} dataText={e.id}/>))}
+            {state.data.map(e=> (<GifContainer dataImg = {e.images.downsized.url} dataText={e.id}/>))}
         </div>
 
     </>)
