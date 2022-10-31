@@ -6,7 +6,6 @@ function App() {
   return (
 <div className='app'>
 <SearchBar />
-<GifContainer />
 </div>
   );
 }
